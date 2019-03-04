@@ -1,0 +1,50 @@
+<html>
+    <head>
+        <title>Data Extraction</title>
+        <meta charset="UTF-8">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    </head>
+    <body>
+		<div id="table_space"></div>
+    </body>
+	<script>
+		var table_data;
+		$.ajax({
+			type: "GET",
+      		url: "https://jsonplaceholder.typicode.com/posts",
+			async: false,
+			success : function(data){
+				table_data=data;
+			}
+		});
+		var table_heading=Object.keys(table_data[0]);
+		var space=document.getElementById('table_space');
+		var table=document.createElement('table');
+		table.setAttribute("class","tab_class");
+		table.border=1;
+		var th_row=document.createElement('tr');
+		for(var i=0; i<table_heading.length; i++){
+			var cell=document.createElement('th');
+			cell.id="id"+i;
+			var text=document.createTextNode(table_heading[i]);
+			cell.appendChild(text);
+			th_row.appendChild(cell);
+		}
+		table.appendChild(th_row);
+
+		values=table_data.map((element, index)=>{
+			return Object.values(table_data[index])
+		});
+		for(var k=0; k<table_data.length; k++){
+			var row=document.createElement('tr');
+			for(var l=0; l<table_heading.length; l++){
+				var cell=document.createElement('td');
+				var text=document.createTextNode(values[k][l]);
+				cell.appendChild(text);
+				row.appendChild(cell);
+			}
+			table.appendChild(row);
+		}
+		space.appendChild(table);
+	</script>
+</html>
