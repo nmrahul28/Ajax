@@ -9,7 +9,7 @@
     </body>
 	<script>
 		var table_data;
-		$.ajax({
+			$.ajax({
 			type: "GET",
       		url: "https://jsonplaceholder.typicode.com/posts",
 			async: false,
@@ -17,16 +17,24 @@
 				table_data=data;
 			}
 		});
+		function createTable(table_data){
+			let previousTable = document.getElementById('tab_class');
+    		if (!!previousTable) {
+        		previousTable.remove();
+			}
 		var table_heading=Object.keys(table_data[0]);
 		var space=document.getElementById('table_space');
 		var table=document.createElement('table');
-		table.setAttribute("class","tab_class");
+		table.setAttribute("id","tab_class");
 		table.border=1;
+		id=[];
 		var th_row=document.createElement('tr');
 		for(var i=0; i<table_heading.length; i++){
 			var cell=document.createElement('th');
-			cell.id="id"+i;
 			var text=document.createTextNode(table_heading[i]);
+			cell.setAttribute("id", "id"+i);
+			cell.setAttribute("onclick", "sort(this.id)");
+			cell.value=table_heading[i];
 			cell.appendChild(text);
 			th_row.appendChild(cell);
 		}
@@ -46,5 +54,20 @@
 			table.appendChild(row);
 		}
 		space.appendChild(table);
+		}
+		createTable(table_data);
+		function sort(ids) {
+			let flag = true;
+    		table_data.sort(
+    		function (a, b) {
+				if (a[document.getElementById(ids).value]< b[document.getElementById(ids).value] && flag)
+            		return -1;
+        		else
+            		return 1;
+				return 0;
+			});
+			flag = !flag;
+			createTable(table_data);
+		}	
 	</script>
 </html>
